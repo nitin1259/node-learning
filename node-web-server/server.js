@@ -3,6 +3,8 @@ const hbs = require('hbs');
 const fs = require('fs');
 const app = express();
 
+const port = process.env.PORT || 3001;
+
 hbs.registerPartials(__dirname + '/views/partials')
 hbs.registerHelper('currentYear', () => {
     return new Date().getFullYear();
@@ -21,16 +23,18 @@ app.use((req, res, next)=>{
     const date = new Date().toString();
     const log = `${date} : method ${req.method} url ${req.url}`
     console.log(log);
-    fs.appendFile('server.log', log + '\n');
+    fs.appendFile('server.log', log + '\n', ()=>{
+        console.log("Callback after saving the to log")
+    });
 
     next(); // next is a function will we have to call after fininshing the intermediate operation otherwise process will not move further and we have to handle it manually.
 
 })
 
-app.use((req, res, next)=>{
-    res.render('maintenance.hbs')
+// app.use((req, res, next)=>{
+//     res.render('maintenance.hbs')
 
-})
+// })
 
 app.get('/', (req, res) => {
     // res.send('<h1>Hello Node Server </h1>');
@@ -65,7 +69,7 @@ app.get('/bad', (req, res) => {
     })
 })
 
-const server = app.listen(3001, () => {
+const server = app.listen(port, () => {
     const port = server.address().port;
     console.log('Server has been started on port:' + port)
 });
