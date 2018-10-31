@@ -1,0 +1,96 @@
+
+
+Blocking everything happens in order and a nonblocking we start events attaching callbacks and these callbacks get fired later.
+
+require is going to let us do three things -
+
+First it's going to let us load in modules that come bundled with node J.S.. These are things like the HTTP module which lets us make a web server and the FS module which lets us access the file system for our machine.
+
+We are also going to be using require in later videos to load in third party libraries things like Express and sequel eyes which are going to let us write less code. We're going to be able to use pre-written libraries to handle complex problems and all we need to do is implemented by calling a few methods.
+
+And lastly we are going to use require to require our very own files.
+
+It's going to let us break up our application into multiple smaller files which is essential for building real world apps. If you have all of your code in one file it is going to be really hard to test maintain and update never
+
+
+built in module using require and we can get a complete list of all of the built in modules on the nodejs API docs, to view that go to nodejs.org/api
+
+
+
+The ol' infinite loop. What's happening here is this:
+
+1. The script gets changed an nodemon reruns it.
+2. The script executes and it makes a change to notes.json via the fs module.
+3. Nodemon sees that notes.json has changed, so it rerun the script.
+
+Nodemon watches all files in the folder for changes. I'm not getting this because my json.js file is in the playground folder. I've also navigated into the playground folder in the terminal.
+
+You can fix this by specifying specific files to watch or specific file extensions. I'd go with the file extension solution. That would be: nodemon -e=js json.js
+
+repl - read evaluate print loop
+
+to debug the node application we use inspect (eg node inspect app.js) it will run the program in debug mode
+in debug mode we have n and c command, n used to go to the next line and c used to run all the command till the end automatically.
+so if we want to go to the specific line or place then we have to use debugger keyword in our program file and put c in command line.
+
+to inspect the element we use repl command to check the values of variable or object used in the application.
+
+another way to debug the applciation is to use the chrome debug tool
+to start with it we need to pass a flag while starting our applciation (eg- node --inspect-brk app.js) to start with it we have to open chrome put url chrome://inspect - it will show the Remote Target and Open dedicated DevTools for Node - click on that, it will open the debug tool.
+
+---------
+You'll be able to swap out a regular function for an arrow function without issue.
+Now the first issue that's going to arise when you're using aero functions is the fact that arrow functions do not bind a this keyword, So if you are using this inside of your function it's not going to work when you swap it out for an arrow function. This binding refers to the parent binding.
+
+In this case there is no parent function so this would refer to the global this keyword.
+
+
+Call Stack
+The call stack is a really simple data structure that keeps track of program execution inside of the V8. It keeps track of the functions currently executing and the statements that are fired. The callstack is really simple data structure that can do two things - 1. you can add something on the top of it and 2. you can remove the top item that is all it can do.
+
+
+
+Callback function
+in general a callback function is defined as a function that gets passed as an argument to another function and is executed after some of that happens.
+
+---------
+
+to format the object in JSON.stringfy(obj) 
+the object we want to string if I in this case we're going to provide a couple of other arguments.
+The next argument is used to filter out properties, the third argument is going to format the json and you're going to specify exactly how many spaces you want to use per indentation.You could go with two or four depending on your preference.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
