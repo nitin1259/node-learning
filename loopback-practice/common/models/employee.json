@@ -1,0 +1,27 @@
+{
+  "name": "Employee",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "empid": {
+      "type": "string",
+      "required": true
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "assets": {
+      "type": "hasMany",
+      "model": "Asset",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

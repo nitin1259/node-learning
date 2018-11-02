@@ -1,0 +1,16 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "mongodb": {
+    "host": "localhost",
+    "port": 27017,
+    "url": "mongodb://localhost:27017/mongodb",
+    "database": "assetmgmt",
+    "password": "nsingh",
+    "name": "mongodb",
+    "user": "nsingh",
+    "connector": "mongodb"
+  }
+}
