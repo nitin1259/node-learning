@@ -1,3 +1,6 @@
+Javascript object oriented details.
+https://javascript.info/object-oriented-programming
+https://github.com/iliakan/javascript-tutorial-en/tree/master/1-js/07-object-oriented-programming
 
 
 Blocking everything happens in order and a nonblocking we start events attaching callbacks and these callbacks get fired later.
