@@ -9,9 +9,9 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client)=>{
     const db = client.db('TodoApp');
 
     db.collection('User').insertOne({
-        name: 'Nitin',
-        age: 29,
-        lcoation: 'India',
+        name: 'Vipin',
+        age: 28,
+        lcoation: 'Moradabad',
         isActive: true
     }, (err, results)=>{
         if(err) return  console.log("Error creating documents: ", err);
