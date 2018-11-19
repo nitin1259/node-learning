@@ -1,84 +1,38 @@
 
-const mongoose = require('mongoose');
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const {mongoose} = require('./db/mongoose');
+const {ToDos} = require('./models/toDo');
+const {User} = require('./models/user');
+
+const app = express();
 
 
-mongoose.Promise = global.Promise;
+app.use(bodyParser.json());
 
-mongoose.connect('mongodb://localhost:27017/ToDoApp');
+app.post('/ToDos', (req, res) => {
+    console.log(req.body.text);
+    const todo = new ToDos({
+        text: req.body.text
+    });
 
-const ToDos = mongoose.model('ToDos', {
-    text: {
-        type: String,
-        required: true,
-        trim: true,
-        minLength: 1
-    },
-    completed: {
-        type: Boolean,
-        default: false
-    },
-    completeAt: {
-        type: Number,
-        default: null
-    }
-});
-
-
-// const newTodo = new ToDos({
-//     text: 'Cook dinner'
-// });
-
-
-// newTodo.save().then(res => {
-//     console.log('create a todo collection document ', res);
-// }, err => {
-//     console.log('error while saving todos: ', err)
-// });
-
-
-// const anotherTodo = new ToDos({
-//     text: 'go to gym',
-//     completed: false,
-//     completeAt: 0
-// });
-
-
-// anotherTodo.save().then(res => {
-//     console.log('create a todo collection document ', res);
-// }).catch(err => {
-//     console.log('error while saving todos: ', err);
-// })
-
-/*
-const todo1 = new ToDos({
-    text: 'Something has to do'
-});
-
-todo1.save().then(res => {
-    console.log('create a todo collection document ', res);
-}).catch(err => {
-    console.log('error while saving todos: ', err);
-})
-
-*/
-
-const User = mongoose.model('User', {
-    email: {
-        type: String,
-        required: true,
-        minLength: 1,
-        trim: true
-    }
+    todo.save().then(result =>{
+        res.status(200).send(result);
+    }).catch(err =>{
+        res.status(400).send(err);
+    })
 })
 
 
-const user1 = new User({
-    email  : 'jaat.nitin19@gmail.com'
+app.get('/ToDos/1234', (req, res) => {
+    res.send([{
+        text: 'Things to complete',
+        completed: false
+    }])
 })
 
 
-user1.save().then(res => {
-    console.log('create a todo collection document ', res);
-}).catch(err => {
-    console.log('error while saving todos: ', err);
+app.listen(3000, () => {
+    console.log(`server started at port number: 3000`);
 })
