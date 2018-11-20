@@ -25,12 +25,15 @@ app.post('/ToDos', (req, res) => {
 })
 
 
-app.get('/ToDos/1234', (req, res) => {
-    res.send([{
-        text: 'Things to complete',
-        completed: false
-    }])
-})
+app.get('/ToDos', (req, res) => {
+    ToDos.find().then(todos =>{
+        res.status(200).send({
+            todos
+        });
+    }).catch(err =>{
+        res.status(500).send(err);
+    });
+});
 
 
 app.listen(3000, () => {

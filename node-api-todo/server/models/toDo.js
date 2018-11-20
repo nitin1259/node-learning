@@ -13,7 +13,7 @@ const ToDos = mongoose.model('ToDos', {
     },
     completeAt: {
         type: Number,
-        default: null
+        default: 123
     }
 });
 
