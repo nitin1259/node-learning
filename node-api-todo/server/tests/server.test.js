@@ -3,12 +3,15 @@ const expect = require('expect');
 
 const { ToDos } = require('./../models/toDo');
 const { app } = require('./../server');
+const { ObjectID } = require('mongodb');
 
 // instead of empty ToDos we initially add 2 todos and then start testing
 
 const todos = [{
+    _id: new ObjectID(),
     text: 'first test todo'
 }, {
+    _id: new ObjectID(),
     text: 'second test todo'
 }];
 
@@ -22,7 +25,7 @@ describe('Test the post /ToDos', () => {
     it('should create a new to do', done => {
         const text = 'Test the TODO'
         request(app)
-            .post('/ToDos')
+            .post('/todos')
             .send({ text })
             .expect(200)
             .expect((res) => {
@@ -45,7 +48,7 @@ describe('Test the post /ToDos', () => {
     it('should not create a todo with empty body', done => {
         const text = ''
         request(app)
-            .post('/ToDos')
+            .post('/todos')
             .send({ text })
             .expect(400)
             .expect(res => {
@@ -62,7 +65,7 @@ describe('Test the post /ToDos', () => {
     })
 });
 
-describe('GET /ToDos', ()=>{
+describe('GET /todos', ()=>{
     it('should list all the todos', done =>{
         request(app)
         .get('/ToDos')
@@ -72,4 +75,38 @@ describe('GET /ToDos', ()=>{
         })
         .end(done);
     })
-})
+});
+
+describe('GET /todos/:id', ()=>{
+    it('should return the passed todo', done=>{
+        request(app)
+        .get(`/todos/${todos[0]._id.toHexString()}`)
+        .expect(200)
+        .expect(res=>{
+            expect(res.body.todo.text).toBe(todos[0].text)
+        })
+        .end(done);
+    });
+
+
+    it('should validate for invalid Id', done=>{
+        request(app)
+        .get(`/todos/${todos[0]._id.toHexString()}xyz`)
+        .expect(404)
+        .expect(res=>{
+            expect(res.body.msg).toBe('Not a valid id')
+        })
+        .end(done);
+    });
+
+    it('should validate non existing id', done=>{
+        const id = new ObjectID().toHexString(); //'5bf43c4da8d7bd4ba4e1581b'
+        request(app)
+        .get(`/todos/${id}`)
+        .expect(404)
+        .expect(res=>{
+            expect(res.body.msg).toBe('document not available with id: '+id)
+        })
+        .end(done);
+    });
+});
