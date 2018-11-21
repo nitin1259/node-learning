@@ -1,6 +1,7 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const _ = require('lodash');
 
 const { mongoose } = require('./db/mongoose');
 const { ToDos } = require('./models/toDo');
@@ -62,15 +63,41 @@ app.delete('/todos/:todoId', (req, res) => {
     if (!ObjectID.isValid(id)) {
         res.status(403).send({ msg: 'Id is not valid' })
     } else {
-        ToDos.findByIdAndDelete(id).then(todo =>{
-            if(!todo){
-                res.status(404).send({msg: 'Id not found'})
+        ToDos.findByIdAndDelete(id).then(todo => {
+            if (!todo) {
+                res.status(404).send({ msg: 'Id not found' })
             }
-            res.status(200).send({todo});
-        }).catch(err =>{
+            res.status(200).send({ todo });
+        }).catch(err => {
             res.status(400).send(err);
         });
     }
+});
+
+// PATCH /todos/:id
+app.patch('/todos/:todoId', (req, res) => {
+    const id = req.params.todoId;
+    const body = _.pick(req.body, ['text', 'completed']);
+
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send({ msg: 'Id is not valid' })
+    }
+
+    if (_.isBoolean(body.completed) && body.completed) {
+        body.completeAt = new Date().getTime();
+    } else {
+        body.completed = false;
+        body.completeAt = null;
+    }
+    
+    ToDos.findByIdAndUpdate(id, { $set: body }, { new: true }).then(todo => {
+        if (!todo) {
+            res.status(404).send({ msg: 'todo not found' })
+        }
+        res.status(200).send({ todo });
+    }).catch(err => {
+        res.status(400).send(err);
+    });
 });
 
 app.listen(3000, () => {

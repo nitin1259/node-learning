@@ -12,7 +12,9 @@ const todos = [{
     text: 'first test todo'
 }, {
     _id: new ObjectID(),
-    text: 'second test todo'
+    text: 'second test todo',
+    completed: true,
+    completeAt: 123
 }];
 
 beforeEach(done => {
@@ -21,7 +23,7 @@ beforeEach(done => {
     }).then(() => done());
 });
 
-describe('Test the post /ToDos', () => {
+describe('POST /toDos', () => {
     it('should create a new to do', done => {
         const text = 'Test the TODO'
         request(app)
@@ -109,7 +111,7 @@ describe('GET /todos/:id', ()=>{
         })
         .end(done);
     });
-
+});
     describe('DELETE /todos/:id', ()=>{
         
         it('should delete the todo', done =>{
@@ -153,5 +155,41 @@ describe('GET /todos/:id', ()=>{
         });
     });
 
+    describe('PATCH /todos/:id', ()=>{
+        it('should update the todo completeAt', done=>{
+            const id = todos[0]._id.toHexString();
+            request(app)
+            .patch(`/todos/${id}`)
+            .send({completed: true})
+            .expect(200)
+            .expect(res =>{
+                expect(res.body.todo.completed).toBe(true);
+                // expect(res.body.todo.completeAt).toBeA('number');
+            }).end((err, res)=>{
+                if(err) return done(err);
 
-});
+                ToDos.findById(id).then(todo=>{
+                    expect(todo.completed).toBe(true);
+                    done();
+                }).catch(err=> done(err))
+            })
+        });
+
+        it('should update the todo non complete', done=>{
+            const id = todos[1]._id.toHexString();
+            request(app)
+            .patch(`/todos/${id}`)
+            .send({completed: false})
+            .expect(200)
+            .expect(res =>{
+                expect(res.body.todo.completed).toBe(false);
+            }).end((err, res)=>{
+                if(err) return done(err);
+
+                ToDos.findById(id).then(todo=>{
+                    expect(todo.completeAt).toBe(null);
+                    done();
+                }).catch(err=> done(err))
+            })
+        });
+    });
