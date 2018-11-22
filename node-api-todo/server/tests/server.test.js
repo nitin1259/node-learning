@@ -7,6 +7,7 @@ const { ObjectID } = require('mongodb');
 
 // instead of empty ToDos we initially add 2 todos and then start testing
 
+console.log('----Node env----', process.env.NODE_ENV)
 const todos = [{
     _id: new ObjectID(),
     text: 'first test todo'
