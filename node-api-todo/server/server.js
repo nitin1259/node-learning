@@ -100,6 +100,19 @@ app.patch('/todos/:todoId', (req, res) => {
     });
 });
 
+// POST Users
+app.post('/users', (req, res)=>{
+    const body = _.pick(req.body, ['email', 'password']);
+
+    const user = new User(body);
+
+    user.save().then(user=>{
+        res.status(200).send(user);
+    }).catch(err=>{
+        res.status(400).send(err);
+    })
+});
+
 app.listen(3000, () => {
     console.log(`server started at port number: 3000`);
 })
