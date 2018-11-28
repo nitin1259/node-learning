@@ -57,10 +57,31 @@ UserSchema.methods.generateAuthToken = function () {
 
     // user.tokens = user.tokens.concat([{access, token}]);
     user.tokens.push({ access, token });
-    
+
     return user.save().then(() => {
         return token;
     })
+}
+
+// model methodds
+UserSchema.statics.getUserByToken = function (token) {
+    const User = this;
+    let decoded = '';
+    
+    try {
+        decoded = jwt.verify(token, secretKey);
+    } catch (error) {
+        // return new Promise((resolve, reject)=>{
+        //     reject();
+        // });
+        return Promise.reject('invalid token')
+    }
+
+    return User.findOne({
+        _id: decoded._id,
+        'tokens.token': token,
+        'tokens.access': decoded.access
+    });
 }
 
 const User = mongoose.model('User', UserSchema); // this is just refactoring of code not fucntionality...
