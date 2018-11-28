@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
+const bcryptjs = require('bcryptjs');
 
 const secretKey = 'Pass@123';
 // const user = {
@@ -83,6 +84,21 @@ UserSchema.statics.getUserByToken = function (token) {
         'tokens.access': decoded.access
     });
 }
+
+UserSchema.pre('save', function(next){
+    const user = this;
+    if(user.isModified('password')){
+        //encrypt the password only if there is password field changed or modified.
+        bcryptjs.genSalt(10, (err, salt)=>{
+            bcryptjs.hash(user.password, salt, (err, hashPass)=>{
+                user.password = hashPass;
+                next();
+            });
+        });
+    }else{
+        next();
+    }
+});
 
 const User = mongoose.model('User', UserSchema); // this is just refactoring of code not fucntionality...
 /*
