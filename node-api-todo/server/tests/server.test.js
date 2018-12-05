@@ -258,3 +258,43 @@ describe('POST /users', ()=>{
         .end(done);
     });
 });
+
+describe('POST /users/login', ()=>{
+    it('should login user and return a auth token', done =>{
+        request(app)
+        .post('/users/login')
+        .send({
+            email: users[1].email,
+            password: users[1].password
+        })
+        .expect(200)
+        .expect(res=>{
+            expect(res.body.email).toBe( users[1].email);
+        })
+        // .end((err, res) =>{
+        //     if(err){
+        //         done(err);
+        //     }
+
+        //     User.findById(users[1]._id).then(user=>{
+        //         expect(user.tokens[0]).toInclude({
+        //             access:'auth',
+        //             token: res.headers['x-auth']
+        //         });
+        //         done();
+        //     }).catch(err=> done(err))
+        // });
+        .end(done);
+    });
+
+    it('should reject invalid login', done =>{
+        request(app)
+        .post('/users/login')
+        .send({
+            email: 'xyz',
+            password: 'abc'
+        })
+        .expect(401)
+        .end(done);
+    });
+});
