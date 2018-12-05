@@ -4,25 +4,13 @@ const expect = require('expect');
 const { ToDos } = require('./../models/toDo');
 const { app } = require('./../server');
 const { ObjectID } = require('mongodb');
-
+const { todos, populateTodos, users, populateUsers} = require('./seed/seed');
 // instead of empty ToDos we initially add 2 todos and then start testing
 
 console.log('----Node env----', process.env.NODE_ENV)
-const todos = [{
-    _id: new ObjectID(),
-    text: 'first test todo'
-}, {
-    _id: new ObjectID(),
-    text: 'second test todo',
-    completed: true,
-    completeAt: 123
-}];
 
-beforeEach(done => {
-    ToDos.deleteMany({}).then(() => {
-        return ToDos.insertMany(todos)
-    }).then(() => done());
-});
+beforeEach(populateUsers);
+beforeEach(populateTodos);
 
 describe('POST /toDos', () => {
     it('should create a new to do', done => {

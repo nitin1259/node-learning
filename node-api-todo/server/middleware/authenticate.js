@@ -5,7 +5,7 @@ const authMiddleware = (req, res, next) =>{
 
     User.getUserByToken(token).then(user=>{
         if(!user){
-            Promise.reject('user not found')
+            return Promise.reject('user not found')
         }
         // res.send(user);
         req.user = user;
