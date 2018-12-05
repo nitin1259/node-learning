@@ -138,6 +138,20 @@ app.get('/users/me', authMiddleware, (req, res)=>{
     res.send(req.user);
 })
 
+// Post /users/login {email, password}
+
+app.post('/users/login', (req, res)=>{
+    const body = _.pick(req.body, ['email', 'password']);
+    User.findUserByCredentials(body.email, body.password).then(user =>{
+        // res.send(user);
+        return user.generateAuthToken().then(token=>{
+            res.header('x-auth', token).send(user);
+        });
+    }).catch(err=>{
+        res.status(401).send(err);
+    });
+});
+
 app.listen(3000, () => {
     console.log(`server started at port number: 3000`);
 })
