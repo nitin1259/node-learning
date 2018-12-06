@@ -76,6 +76,7 @@ describe('GET /todos/:id', ()=>{
     it('should return the passed todo', done=>{
         request(app)
         .get(`/todos/${todos[0]._id.toHexString()}`)
+        .set('x-auth', users[0].tokens[0].token)
         .expect(200)
         .expect(res=>{
             expect(res.body.todo.text).toBe(todos[0].text)
@@ -87,6 +88,7 @@ describe('GET /todos/:id', ()=>{
     it('should validate for invalid Id', done=>{
         request(app)
         .get(`/todos/${todos[0]._id.toHexString()}xyz`)
+        .set('x-auth', users[0].tokens[0].token)
         .expect(404)
         .expect(res=>{
             expect(res.body.msg).toBe('Not a valid id')
@@ -98,6 +100,7 @@ describe('GET /todos/:id', ()=>{
         const id = new ObjectID().toHexString(); //'5bf43c4da8d7bd4ba4e1581b'
         request(app)
         .get(`/todos/${id}`)
+        .set('x-auth', users[0].tokens[0].token)
         .expect(404)
         .expect(res=>{
             expect(res.body.msg).toBe('document not available with id: '+id)
@@ -111,6 +114,7 @@ describe('GET /todos/:id', ()=>{
             const id = todos[0]._id.toHexString();
             request(app)
             .delete(`/todos/${id}`)
+            .set('x-auth', users[0].tokens[0].token)
             .expect(200)
             .expect(res =>{
                 expect(res.body.todo.text).toBe(todos[0].text);
@@ -132,6 +136,7 @@ describe('GET /todos/:id', ()=>{
             const id = new ObjectID().toHexString();
             request(app)
             .delete(`/todos/${id}`)
+            .set('x-auth', users[0].tokens[0].token)
             .expect(404)
             .expect(res =>{
                 expect(res.body.msg).toBe('Id not found');
@@ -142,6 +147,7 @@ describe('GET /todos/:id', ()=>{
             const id = new ObjectID().toHexString();
             request(app)
             .delete(`/todos/${id}xyz`)
+            .set('x-auth', users[0].tokens[0].token)
             .expect(403).expect(res =>{
                 expect(res.body.msg).toBe('Id is not valid');
             }).end(done);
@@ -154,6 +160,7 @@ describe('GET /todos/:id', ()=>{
             request(app)
             .patch(`/todos/${id}`)
             .send({completed: true})
+            .set('x-auth', users[0].tokens[0].token)
             .expect(200)
             .expect(res =>{
                 expect(res.body.todo.completed).toBe(true);
@@ -173,6 +180,7 @@ describe('GET /todos/:id', ()=>{
             request(app)
             .patch(`/todos/${id}`)
             .send({completed: false})
+            .set('x-auth', users[1].tokens[0].token)
             .expect(200)
             .expect(res =>{
                 expect(res.body.todo.completed).toBe(false);

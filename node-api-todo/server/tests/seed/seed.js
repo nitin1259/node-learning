@@ -26,6 +26,12 @@ const users = [
         _id: userTwoId,
         email: 'sachin.chahal@ca.com',
         password: 'UserTwoPass',
+        tokens: [
+            {
+                access: 'auth',
+                token: jwt.sign({ _id: userTwoId, access: 'auth' }, secretKey).toString()
+            }
+        ]
     }
 ];
 
