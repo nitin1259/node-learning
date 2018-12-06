@@ -5,24 +5,6 @@ const { ToDos } = require('./../../models/toDo');
 const { User } = require('./../../models/user');
 
 const secretKey = 'Pass@123';
-// for todos
-const todos = [{
-    _id: new ObjectID(),
-    text: 'first test todo'
-}, {
-    _id: new ObjectID(),
-    text: 'second test todo',
-    completed: true,
-    completeAt: 123
-}];
-
-const populateTodos = (done) => {
-    ToDos.deleteMany({}).then(() => {
-        return ToDos.insertMany(todos)
-    }).then(() => {
-        done();
-    })
-}
 
 // for users
 const userOneId = new ObjectID();
@@ -57,7 +39,26 @@ const populateUsers = (done) => {
     })
 }
 
+// for todos
+const todos = [{
+    _id: new ObjectID(),
+    text: 'first test todo',
+    _creator: userOneId
+}, {
+    _id: new ObjectID(),
+    text: 'second test todo',
+    completed: true,
+    completeAt: 123,
+    _creator: userTwoId
+}];
 
+const populateTodos = (done) => {
+    ToDos.deleteMany({}).then(() => {
+        return ToDos.insertMany(todos)
+    }).then(() => {
+        done();
+    })
+}
 module.exports = {
     todos,
     populateTodos,

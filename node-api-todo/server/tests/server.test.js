@@ -19,6 +19,7 @@ describe('POST /toDos', () => {
         request(app)
             .post('/todos')
             .send({ text })
+            .set('x-auth', users[0].tokens[0].token)
             .expect(200)
             .expect((res) => {
                 expect(res.body.text).toBe(text)
@@ -42,6 +43,7 @@ describe('POST /toDos', () => {
         request(app)
             .post('/todos')
             .send({ text })
+            .set('x-auth', users[0].tokens[0].token)
             .expect(400)
             .expect(res => {
                 expect(res.body._message).toBe('ToDos validation failed')
@@ -61,9 +63,10 @@ describe('GET /todos', ()=>{
     it('should list all the todos', done =>{
         request(app)
         .get('/ToDos')
+        .set('x-auth', users[0].tokens[0].token)
         .expect(200)
         .expect(res=>{
-            expect(res.body.todos.length).toBe(2)
+            expect(res.body.todos.length).toBe(1)
         })
         .end(done);
     })

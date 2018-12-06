@@ -14,10 +14,12 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.post('/todos', (req, res) => {
+// POST /todos
+app.post('/todos', authMiddleware, (req, res) => {
     console.log(req.body.text);
     const todo = new ToDos({
-        text: req.body.text
+        text: req.body.text,
+        _creator: req.user._id
     });
 
     todo.save().then(result => {
@@ -27,9 +29,11 @@ app.post('/todos', (req, res) => {
     })
 })
 
-
-app.get('/todos', (req, res) => {
-    ToDos.find().then(todos => {
+// Get all /todos
+app.get('/todos', authMiddleware, (req, res) => {
+    ToDos.find({
+        _creator: req.user._id
+    }).then(todos => {
         res.status(200).send({
             todos
         });
