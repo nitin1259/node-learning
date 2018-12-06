@@ -68,7 +68,7 @@ UserSchema.methods.generateAuthToken = function () {
 UserSchema.statics.getUserByToken = function (token) {
     const User = this;
     let decoded = '';
-    
+
     try {
         decoded = jwt.verify(token, secretKey);
     } catch (error) {
@@ -85,19 +85,19 @@ UserSchema.statics.getUserByToken = function (token) {
     });
 }
 
-UserSchema.statics.findUserByCredentials = function(email, password){
+UserSchema.statics.findUserByCredentials = function (email, password) {
     const User = this;
 
-    return User.findOne({email}).then(user=>{
-        if(!user){
+    return User.findOne({ email }).then(user => {
+        if (!user) {
             return Promise.reject('User not found');
         }
-        
-        return new Promise((resolve, reject)=>{
-            bcryptjs.compare(password, user.password, (err, result)=>{
-                if(err || !result){
+
+        return new Promise((resolve, reject) => {
+            bcryptjs.compare(password, user.password, (err, result) => {
+                if (err || !result) {
                     reject(err)
-                }else{
+                } else {
                     resolve(user);
                 }
             })
@@ -105,17 +105,26 @@ UserSchema.statics.findUserByCredentials = function(email, password){
     })
 }
 
-UserSchema.pre('save', function(next){
+UserSchema.methods.deleteToken = function (token) {
     const user = this;
-    if(user.isModified('password')){
+    return user.update({
+        $pull: {
+            tokens: { token }
+        }
+    })
+}
+
+UserSchema.pre('save', function (next) {
+    const user = this;
+    if (user.isModified('password')) {
         //encrypt the password only if there is password field changed or modified.
-        bcryptjs.genSalt(10, (err, salt)=>{
-            bcryptjs.hash(user.password, salt, (err, hashPass)=>{
+        bcryptjs.genSalt(10, (err, salt) => {
+            bcryptjs.hash(user.password, salt, (err, hashPass) => {
                 user.password = hashPass;
                 next();
             });
         });
-    }else{
+    } else {
         next();
     }
 });

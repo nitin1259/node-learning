@@ -90,7 +90,7 @@ app.patch('/todos/:todoId', (req, res) => {
         body.completed = false;
         body.completeAt = null;
     }
-    
+
     ToDos.findByIdAndUpdate(id, { $set: body }, { new: true }).then(todo => {
         if (!todo) {
             res.status(404).send({ msg: 'todo not found' })
@@ -102,16 +102,16 @@ app.patch('/todos/:todoId', (req, res) => {
 });
 
 // POST Users
-app.post('/users', (req, res)=>{
+app.post('/users', (req, res) => {
     const body = _.pick(req.body, ['email', 'password']);
 
     const user = new User(body);
 
-    user.save().then(()=>{
+    user.save().then(() => {
         return user.generateAuthToken();
-    }).then((token)=>{
+    }).then((token) => {
         res.status(200).header('x-auth', token).send(user);
-    }).catch(err=>{
+    }).catch(err => {
         res.status(400).send(err);
     })
 });
@@ -134,21 +134,33 @@ app.post('/users', (req, res)=>{
 // }
 
 // GET Users/me
-app.get('/users/me', authMiddleware, (req, res)=>{
+app.get('/users/me', authMiddleware, (req, res) => {
     res.send(req.user);
 })
 
 // Post /users/login {email, password}
 
-app.post('/users/login', (req, res)=>{
+app.post('/users/login', (req, res) => {
     const body = _.pick(req.body, ['email', 'password']);
-    User.findUserByCredentials(body.email, body.password).then(user =>{
+    User.findUserByCredentials(body.email, body.password).then(user => {
         // res.send(user);
-        return user.generateAuthToken().then(token=>{
+        return user.generateAuthToken().then(token => {
             res.header('x-auth', token).send(user);
         });
-    }).catch(err=>{
+    }).catch(err => {
         res.status(401).send(err);
+    });
+});
+
+// Logging Out - DELETE /users/me/token
+app.delete('/users/me/token', authMiddleware, (req, res) => {
+    const user = req.user;
+    const token = req.token;
+
+    user.deleteToken(token).then(() => {
+        res.send('successfully logout')
+    }, () => {
+        res.status(400).send('error while logging out!!!');
     });
 });
 
