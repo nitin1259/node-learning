@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcryptjs = require('bcryptjs');
 
-const secretKey = 'Pass@123';
+const secretKey = process.env.SECRET_KEY;
 // const user = {
 //     email: 'jaat.nitin19@gmail.com';
 //     password: 'pass@123',

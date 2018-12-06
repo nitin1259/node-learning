@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+# /server/config/config.json --as this contais sensitive data we should not commit to git but use it locally.
 
 # testing
 /coverage

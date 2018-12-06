@@ -4,7 +4,7 @@ const jwt  = require('jsonwebtoken');
 const { ToDos } = require('./../../models/toDo');
 const { User } = require('./../../models/user');
 
-const secretKey = 'Pass@123';
+const secretKey = process.env.SECRET_KEY;
 
 // for users
 const userOneId = new ObjectID();

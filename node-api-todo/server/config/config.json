@@ -1,0 +1,12 @@
+{
+    "test":{
+        "PORT": "3000",
+        "MONGODB_URI": "mongodb://localhost:27017/TodoAppTest",
+        "SECRET_KEY":"Secret_test_Key@1234"
+    },
+    "development":{
+        "PORT": "3000",
+        "MONGODB_URI": "mongodb://localhost:27017/TodoApp",
+        "SECRET_KEY":"Secret_dev_Key@1259"
+    }
+}
