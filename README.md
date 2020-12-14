@@ -10,3 +10,6 @@ this respository is all about basic concept to in depth learning
 - test cases.
 - practice tests
 - test driven development.
+
+## up coming
+- next.js
