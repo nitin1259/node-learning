@@ -13,3 +13,4 @@ this respository is all about basic concept to in depth learning
 
 ## up coming
 - next.js
+- Deno.js
