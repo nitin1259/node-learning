@@ -11,7 +11,7 @@ this respository is all about basic concept to in depth learning
 - practice tests
 - test driven development.
 
-## up coming
+## coming next...
 - next.js
 - Deno.js
 - graphQL.js
