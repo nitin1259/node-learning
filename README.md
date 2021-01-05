@@ -16,5 +16,4 @@ this respository is all about basic concept to in depth learning
 - Deno.js
 - graphQL.js
 - react-native.js
-- redux-saga
 
